@@ -8,6 +8,9 @@
             type="com.android.currencyconverter.view.main.MainViewModel" />
 
         <import type="android.view.View" />
+
+        <import type="com.android.currencyconverter.BuildConfig" />
+
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
@@ -62,6 +65,18 @@
             app:layout_constraintTop_toBottomOf="@+id/appName"
             tools:targetApi="lollipop"
             tools:visibility="visible" />
+
+        <TextView
+            android:id="@+id/version_name"
+            style="@style/TextAppearance.MaterialComponents.Overline"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@{@string/version(BuildConfig.VERSION_NAME)}"
+            android:textAllCaps="true"
+            android:textColor="@color/white"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            tools:text="Version 1234" />
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>

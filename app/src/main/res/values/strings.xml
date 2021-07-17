@@ -13,6 +13,7 @@
     <string name="select_currency">Select Currency</string>
     <string name="conversion_info">%1s = %2s</string>
     <string name="conversion_info_at_the_rate">%1s = %2s at the market rate</string>
+    <string name="version">Version : %s</string>
 
     <!-- Currency names  -->
     <string name="USD_AED">Emirati Dirham</string>

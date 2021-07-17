@@ -6,6 +6,7 @@ import androidx.test.espresso.matcher.ViewMatchers.*
 import androidx.test.ext.junit.rules.ActivityScenarioRule
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.filters.LargeTest
+import com.android.currencyconverter.BuildConfig
 import com.android.currencyconverter.R
 import com.android.currencyconverter.view.main.MainActivity
 import org.hamcrest.Matchers.not
@@ -43,5 +44,10 @@ class MainActivityTest {
         activityRule.scenario.onActivity { it.updateLoadingView(false) }
         onView(withId(R.id.retry)).check(matches(isDisplayed()))
         onView(withId(R.id.progressBar)).check(matches(not(isDisplayed())))
+    }
+
+    @Test
+    fun testVersionName() {
+        onView(withId(R.id.version_name)).check(matches(withText("Version : ${BuildConfig.VERSION_NAME}")))
     }
 }
