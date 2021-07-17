@@ -13,7 +13,7 @@ import org.robolectric.annotation.Config
 @RunWith(RobolectricTestRunner::class)
 @Config(sdk = [Build.VERSION_CODES.O_MR1])
 class AppPrefsTest {
-    private val context : Context = ApplicationProvider.getApplicationContext()
+    private val context: Context = ApplicationProvider.getApplicationContext()
     private val appPrefs = AppPrefs(context)
 
     @Before
@@ -22,30 +22,22 @@ class AppPrefsTest {
     }
 
     private fun clearSharedPrefs() = context
-        .getSharedPreferences("${context.packageName}.properties", Context.MODE_PRIVATE)
+        .getSharedPreferences("${context.packageName}.prop", Context.MODE_PRIVATE)
         .edit()
         .clear()
         .apply()
 
     @Test
     fun whenNoValueExistsShouldReturn0ByDefault() {
-        val actual = appPrefs.timestampInSeconds
+        val actual = appPrefs.timestampInMilliSeconds
         assertThat(actual).isEqualTo(AppPrefs.NO_DATA)
     }
 
     @Test
-    fun timestampShouldReturnCorrectValueWhenSetTo_1604779208() {
-        appPrefs.timestampInSeconds = 1_604_779_208L
-        val actual = appPrefs.timestampInSeconds
-        val expected = 1_604_779_208L
-        assertThat(actual).isEqualTo(expected)
-    }
-
-    @Test
-    fun timestampShouldReturnCorrectValueWhenSetTo_1748522368() {
-        appPrefs.timestampInSeconds = 1_748_522_368L
-        val actual = appPrefs.timestampInSeconds
-        val expected = 1_748_522_368L
-        assertThat(actual).isEqualTo(expected)
+    fun timestampShouldReturnCorrectValueWhenSet() {
+        val currentTimeStamp = System.currentTimeMillis()
+        appPrefs.timestampInMilliSeconds = currentTimeStamp
+        val actual = appPrefs.timestampInMilliSeconds
+        assertThat(actual).isEqualTo(currentTimeStamp)
     }
 }

@@ -3,7 +3,7 @@ package com.android.currencyconverter.data
 import android.content.Context
 import com.android.currencyconverter.R
 import com.android.currencyconverter.model.ApiEndPoint
-import com.android.currencyconverter.model.Currency
+import com.android.currencyconverter.model.CurrencyModel
 import com.android.currencyconverter.model.ExchangeRates
 import com.android.currencyconverter.model.Resource
 import com.android.currencyconverter.utils.Utils.isNetworkAvailable
@@ -22,19 +22,22 @@ class CurrencyRepository @Inject constructor(
     private val appPrefs: AppPrefs
 ) : Repository {
 
-    override var isDataEmpty = appPrefs.isDataEmpty
+    override var isDataEmpty: Boolean = true
+        get() = appPrefs.isDataEmpty
 
-    override val timestampInSeconds = appPrefs.timestampInSeconds
+    override var lastUpdatedTimeInMilliSeconds: Long = 0
+        get() = appPrefs.timestampInMilliSeconds
+
 
     override fun getAllCurrencies() = currencyDao.getAllCurrencies()
 
-    override fun insertCurrency(currency: Currency) {
+    override fun insertCurrency(currency: CurrencyModel) {
         CoroutineScope(Dispatchers.IO).launch {
             currencyDao.insertCurrency(currency)
         }
     }
 
-    override fun insertCurrencies(currencies: List<Currency>) {
+    override fun insertCurrencies(currencies: List<CurrencyModel>) {
         CoroutineScope(Dispatchers.IO).launch {
             currencyDao.insertCurrencies(currencies)
         }
@@ -50,11 +53,14 @@ class CurrencyRepository @Inject constructor(
             val retrofitResponse: Response<ApiEndPoint>
             try {
                 retrofitResponse = exchangeRateService.getExchangeRates(getApiKey())
-            } catch (e: SocketTimeoutException) {
-                return Resource.Error(NETWORK_TIMEOUT_ERROR_MESSAGE)
+            } catch (e: Exception) {
+                return if (e is SocketTimeoutException) Resource.Error(NETWORK_TIMEOUT_ERROR_MESSAGE) else Resource.Error(
+                    e.message
+                )
             }
             return if (retrofitResponse.isSuccessful) {
-                persistResponse(retrofitResponse)
+                saveResponse(appPrefs.isDataEmpty, retrofitResponse)
+                appPrefs.timestampInMilliSeconds = System.currentTimeMillis()
                 Resource.Success
             } else {
                 // Retrofit call executed but response wasn't in the 200s
@@ -67,23 +73,22 @@ class CurrencyRepository @Inject constructor(
 
     private fun parseError(response: Response<ApiEndPoint>): String? {
         response.errorBody()?.let { responseBody ->
-            return JSONObject(responseBody.string())?.optJSONObject("error")?.optString("message")
+            return JSONObject(responseBody.string()).optJSONObject("error")?.optString("message")
         }
         return null
     }
 
-    private suspend fun persistResponse(response: Response<ApiEndPoint>) {
+    private suspend fun saveResponse(isDataEmpty: Boolean, response: Response<ApiEndPoint>) {
         response.body()?.let { responseBody ->
             responseBody.exchangeRates?.let { exchangeRates ->
-                persistCurrencies(exchangeRates)
+                persistCurrencies(isDataEmpty, exchangeRates)
             }
-            appPrefs.timestampInSeconds = responseBody.timestamp
         }
     }
 
-    private suspend fun persistCurrencies(exchangeRates: ExchangeRates) {
+    private suspend fun persistCurrencies(isDataEmpty: Boolean, exchangeRates: ExchangeRates) {
         when {
-            appPrefs.isDataEmpty -> currencyDao.insertCurrencies(exchangeRates.currencies)
+            isDataEmpty -> currencyDao.insertCurrencies(exchangeRates.currencies)
             else -> currencyDao.updateExchangeRates(exchangeRates.currencies)
         }
     }
@@ -95,7 +100,8 @@ class CurrencyRepository @Inject constructor(
     }
 
     companion object {
-        const val NETWORK_OR_DATA_UNAVAILABLE_ERROR_MESSAGE = "Network is unavailable and no local data found."
+        const val NETWORK_OR_DATA_UNAVAILABLE_ERROR_MESSAGE =
+            "Network is unavailable and no local data found."
         const val NETWORK_TIMEOUT_ERROR_MESSAGE = "Network request timed out."
     }
 }

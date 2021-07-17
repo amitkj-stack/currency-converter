@@ -10,14 +10,14 @@ class ExchangeRates {
      * Creates a list of Currency objects from the declared fields of this class using reflection
      * to instantiate each object's currency code with the declared field's name.
      */
-    val currencies: List<Currency>
+    val currencies: List<CurrencyModel>
         get() {
-            val currencies = mutableListOf<Currency>()
+            val currencies = mutableListOf<CurrencyModel>()
             val declaredFields = javaClass.declaredFields
             for (property in declaredFields) {
                 val currencyCode = property.name
                 val exchangeRate = property.get(this) as Double
-                currencies.add(Currency(currencyCode, exchangeRate))
+                currencies.add(CurrencyModel(currencyCode, exchangeRate))
             }
             return currencies
         }

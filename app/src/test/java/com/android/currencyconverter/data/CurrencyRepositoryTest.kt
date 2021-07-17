@@ -4,12 +4,12 @@ import android.content.Context
 import com.android.currencyconverter.model.ApiEndPoint
 import com.android.currencyconverter.model.Resource
 import com.android.currencyconverter.utils.Utils.isNetworkAvailable
+import com.google.common.truth.Truth.assertThat
 import io.mockk.*
 import kotlinx.coroutines.runBlocking
 import org.junit.Test
 import retrofit2.Response
 import java.net.SocketTimeoutException
-import com.google.common.truth.Truth.assertThat
 
 class CurrencyRepositoryTest {
 
@@ -36,7 +36,6 @@ class CurrencyRepositoryTest {
     }
 
 
-
     @Test
     fun whenNetworkIsUnavailableShouldReturnError() = runBlocking {
         every { context.isNetworkAvailable() } returns false
@@ -55,4 +54,5 @@ class CurrencyRepositoryTest {
         assertThat(actual).isInstanceOf(expected.javaClass)
         assertThat((actual as Resource.Error).message).isEqualTo(expected.message)
     }
+
 }

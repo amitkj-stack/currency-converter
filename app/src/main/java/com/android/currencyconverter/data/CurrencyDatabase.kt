@@ -5,15 +5,15 @@ import android.content.Context
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
-import com.android.currencyconverter.model.Currency
+import com.android.currencyconverter.model.CurrencyModel
 
-@Database(entities = [Currency::class], version = 1, exportSchema = false)
+@Database(entities = [CurrencyModel::class], version = 1, exportSchema = false)
 abstract class CurrencyDatabase : RoomDatabase() {
 
     abstract fun currencyDao(): CurrencyDao
 
     companion object {
-        private const val DATABASE_NAME = "currency.db"
+        private const val DATABASE_NAME = "currency_convert.db"
 
         @Volatile
         private var instance: CurrencyDatabase? = null
@@ -26,8 +26,8 @@ abstract class CurrencyDatabase : RoomDatabase() {
 
         private fun buildDatabase(context: Context): CurrencyDatabase {
             return Room.databaseBuilder(context, CurrencyDatabase::class.java, DATABASE_NAME)
-                    .fallbackToDestructiveMigration()
-                    .build()
+                .fallbackToDestructiveMigration()
+                .build()
         }
     }
 }

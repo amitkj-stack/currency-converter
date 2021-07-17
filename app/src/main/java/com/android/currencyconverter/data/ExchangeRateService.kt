@@ -15,6 +15,6 @@ interface ExchangeRateService {
     suspend fun getExchangeRates(@Query("access_key") app_id: String): Response<ApiEndPoint>
 
     companion object {
-        const val BASE_URL = "https://api.exchangeratesapi.io/"
+        const val BASE_URL = "http://api.exchangeratesapi.io/"
     }
 }

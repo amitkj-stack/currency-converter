@@ -1,0 +1,233 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="vm"
+            type="com.android.currencyconverter.view.home.HomeViewModel" />
+
+        <import type="android.view.View" />
+
+        <import type="com.android.currencyconverter.utils.Utils" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/main_bg_color"
+        android:padding="@dimen/dp_16"
+        tools:context=".view.home.HomeActivity">
+
+        <TextView
+            android:id="@+id/title"
+            style="@style/TextAppearance.MaterialComponents.Headline4"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/dp_16"
+            android:text="@string/convert"
+            android:textColor="@color/text_color"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/from"
+            style="@style/TextAppearance.MaterialComponents.Overline"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/dp_32"
+            android:text="@string/from"
+            android:textColor="@color/text_color"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/title" />
+
+        <LinearLayout
+            android:id="@+id/from_currency"
+            android:layout_width="wrap_content"
+            android:layout_height="@dimen/dp_64"
+            android:layout_marginTop="@dimen/dp_4"
+            android:background="@color/white"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/from">
+
+            <Button
+                android:id="@+id/btn_from_currency"
+                style="@style/Widget.MaterialComponents.Button.TextButton"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="center_vertical"
+                android:scaleType="fitXY"
+                android:text="@{vm.fromCurrency.trimmedCurrencyCode}"
+                android:textColor="@color/blue_500"
+                app:icon="@drawable/ic_search"
+                app:iconTint="@color/blue_500" />
+
+            <androidx.appcompat.widget.AppCompatImageView
+                android:layout_width="35dp"
+                android:layout_height="25dp"
+                android:layout_gravity="center_vertical|left"
+                android:layout_marginRight="@dimen/dp_8"
+                android:gravity="center_vertical"
+                android:scaleType="fitXY"
+                app:image_src="@{Utils.getDrawableResourceByName(vm.fromCurrency.currencyCode.toLowerCase(), context)}" />
+
+        </LinearLayout>
+
+        <Button
+            android:id="@+id/swap_currency"
+            style="@style/Widget.App.Button.Button.IconOnly"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:onClick="@{() -> vm.swapCurrencies()}"
+            app:icon="@drawable/ic_convert"
+            app:iconTint="@color/white"
+            app:layout_constraintBottom_toBottomOf="@+id/from_currency"
+            app:layout_constraintLeft_toRightOf="@+id/from_currency"
+            app:layout_constraintRight_toLeftOf="@+id/to_currency"
+            app:layout_constraintTop_toTopOf="@+id/from_currency"
+            app:rippleColor="@color/white" />
+
+        <TextView
+            android:id="@+id/to"
+            style="@style/TextAppearance.MaterialComponents.Overline"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/dp_32"
+            android:text="@string/to"
+            android:textColor="@color/text_color"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/title" />
+
+        <LinearLayout
+            android:id="@+id/to_currency"
+            android:layout_width="wrap_content"
+            android:layout_height="@dimen/dp_64"
+            android:layout_marginTop="@dimen/dp_4"
+            android:background="@color/white"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/to">
+
+            <Button
+                android:id="@+id/btn_to_currency"
+                style="@style/Widget.MaterialComponents.Button.TextButton"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="center_vertical"
+                android:scaleType="fitXY"
+                android:text="@{vm.toCurrency.trimmedCurrencyCode}"
+                android:textColor="@color/blue_500"
+                app:icon="@drawable/ic_search"
+                app:iconTint="@color/blue_500" />
+
+            <androidx.appcompat.widget.AppCompatImageView
+                android:layout_width="35dp"
+                android:layout_height="25dp"
+                android:layout_gravity="center_vertical|left"
+                android:layout_marginRight="@dimen/dp_8"
+                android:gravity="center_vertical"
+                android:scaleType="fitXY"
+                app:image_src="@{Utils.getDrawableResourceByName(vm.toCurrency.currencyCode.toLowerCase(), context)}" />
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/info"
+            style="@style/TextAppearance.MaterialComponents.Body2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/dp_8"
+            android:background="@drawable/rect_with_corner_having_bg_status_bar_clr"
+            android:gravity="center"
+            android:padding="@dimen/dp_4"
+            android:textColor="@color/white"
+            app:layout_constraintTop_toBottomOf="@+id/from_currency"
+            tools:text="1 MYR = 17.7654 INR at the market rate" />
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/inputLayout"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/dp_16"
+            android:hint="@string/amount"
+            app:boxBackgroundMode="outline"
+            app:boxStrokeColor="@color/white"
+            app:endIconMode="clear_text"
+            app:hintTextColor="@color/white"
+            app:layout_constraintTop_toBottomOf="@+id/conversion_info">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/et_field"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:digits="0123456789."
+                android:inputType="number"
+                android:maxLength="50"
+                android:textColor="@color/white" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+
+        <TextView
+            android:id="@+id/conversion_info"
+            style="@style/TextAppearance.MaterialComponents.Headline5"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/dp_32"
+            android:gravity="center"
+            android:text="@{vm.conversionString}"
+            android:textColor="@color/white"
+            android:textStyle="bold"
+            app:layout_constraintTop_toBottomOf="@+id/info"
+            tools:text="1 MYR = 17.333 INR" />
+
+        <Button
+            android:id="@+id/refresh"
+            style="@style/Widget.MaterialComponents.Button.TextButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/dp_16"
+            android:onClick="@{() -> vm.fetchALLCurrencies()}"
+            android:text="@string/update_currency"
+            android:textColor="@color/white"
+            android:visibility="@{vm.isLoading() ? View.INVISIBLE : View.VISIBLE}"
+            app:icon="@drawable/ic_refresh"
+            app:iconTint="@color/white"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintBottom_toTopOf="@+id/last_updated"
+            app:rippleColor="@color/status_bar_color"
+            tools:visibility="visible" />
+
+        <ProgressBar
+            android:id="@+id/progressBar"
+            android:layout_width="@dimen/dp_24"
+            android:layout_height="@dimen/dp_24"
+            android:indeterminate="true"
+            android:indeterminateTint="@color/white"
+            android:visibility="@{vm.isLoading() ? View.VISIBLE : View.INVISIBLE}"
+            app:layout_constraintBottom_toBottomOf="@+id/refresh"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/refresh"
+            tools:targetApi="lollipop"
+            tools:visibility="visible" />
+
+
+        <TextView
+            android:id="@+id/last_updated"
+            style="@style/TextAppearance.MaterialComponents.Overline"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="@dimen/dp_4"
+            android:text="@{String.format(@string/last_updated, vm.lastUpdated)}"
+            android:textColor="@color/status_bar_color"
+            app:layout_constraintLeft_toLeftOf="@+id/refresh"
+            app:layout_constraintRight_toRightOf="@+id/refresh"
+            app:layout_constraintBottom_toBottomOf="parent"
+            tools:text="Last Updated : 25 Aug, 2020" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>
