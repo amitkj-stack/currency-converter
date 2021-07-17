@@ -17,14 +17,10 @@ In this project, I have followed MVVM architecture with livedata. I also used tw
 
 
 ### ScreenShots ###
-![Image](https://imgur.com/FdR579T.png)
-![Image](https://imgur.com/nofWA7P.png)
-![Image](https://imgur.com/WOxcvjj.png)
+<img src="https://imgur.com/FdR579T.png" width="220" height="450">  <img src="https://imgur.com/nofWA7P.png" width="220" height="450">  <img src="https://imgur.com/WOxcvjj.png" width="220" height="450">
 
 ### ScreenShots (Dark Theme) ###
-![Image](https://imgur.com/34ZW5K1.png)
-![Image](https://imgur.com/AZCDGgz.png)
-![Image](https://imgur.com/hbyTgUC.png)
+<img src="https://imgur.com/34ZW5K1.png" width="220" height="450">  <img src="https://imgur.com/AZCDGgz.png" width="220" height="450">  <img src="https://imgur.com/hbyTgUC.png" width="220" height="450">
 
 
 ### Dependencies ###
